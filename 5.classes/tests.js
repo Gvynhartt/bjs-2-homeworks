@@ -114,3 +114,85 @@ describe('Домашнее задание к лекции 5 «Классы»', (
     });
   })
 });
+
+  describe('Задача №2, пункт 5: собственный тестовый сценарий', () => {
+
+    let myLittleBookshelf, fearAndLoathing, timeParadox, jojoPartX, theUndead, necro, shounenJampu;
+
+    beforeEach(function(){
+    fearAndLoathing = new Book("Пирожков Н.В.", "Страх и ненависть в Шумиловском", 1984, 303);
+    timeParadox = new FantasticBook("Д. Альварес", "Воспоминания о минувшем будущем", 2078, 410);
+    jojoPartX = new DetectiveBook("Дз. Хигасиката", "Кто подставил ДжоДжо и его кролика", 1999, 112);
+    theUndead = new NovelBook("Долматов А.С.", "Смерть при жизни и жизнь после смерти: краткая автобиография", 2024, 228);
+    necro = new Book("Г. Лавкрафт", "Некрономикон", 1919, 661);
+    shounenJampu = new Magazine("Скачки юношества: еженедельник", 1968, 137);
+
+    myLittleBookshelf = new Library("Список чтения для цитирования в части C");
+  });
+
+   it('Создаём собственную библиотеку', () => {
+      expect(myLittleBookshelf).toBeDefined();
+      expect(myLittleBookshelf.name).toEqual('Список чтения для цитирования в части C');
+      expect(myLittleBookshelf.books).toEqual(jasmine.any(Array));
+  })
+
+    it('Добавляем несколько печатных изданий разных типов', () => {
+    myLittleBookshelf.addBook(fearAndLoathing);
+    myLittleBookshelf.addBook(timeParadox);
+    myLittleBookshelf.addBook(jojoPartX);
+    myLittleBookshelf.addBook(theUndead);
+    myLittleBookshelf.addBook(necro);
+    myLittleBookshelf.addBook(shounenJampu);
+
+    expect(myLittleBookshelf.books.length).toEqual(6);
+    expect(myLittleBookshelf.books[0].name).toEqual('Страх и ненависть в Шумиловском');
+    expect(myLittleBookshelf.books[2].name).toEqual('Кто подставил ДжоДжо и его кролика');
+    expect(myLittleBookshelf.books[5].name).toEqual('Скачки юношества: еженедельник');
+  })
+
+    it('Ищем книгу по одному из параметров', () => {
+    myLittleBookshelf.addBook(fearAndLoathing);
+    myLittleBookshelf.addBook(timeParadox);
+    myLittleBookshelf.addBook(jojoPartX);
+    myLittleBookshelf.addBook(theUndead);
+    myLittleBookshelf.addBook(necro);
+    myLittleBookshelf.addBook(shounenJampu);
+
+    const book2found = myLittleBookshelf.findBookBy("releaseDate", 1919);
+    expect(book2found.name).toEqual('Некрономикон');
+    const bookNotFound = myLittleBookshelf.findBookBy("pageCount", 5928);
+    expect(bookNotFound).toEqual(null);
+  })
+
+    it('Выдаём книгу по названию', () => {
+    myLittleBookshelf.addBook(fearAndLoathing);
+    myLittleBookshelf.addBook(timeParadox);
+    myLittleBookshelf.addBook(jojoPartX);
+    myLittleBookshelf.addBook(theUndead);
+    myLittleBookshelf.addBook(necro);
+    myLittleBookshelf.addBook(shounenJampu);
+
+      const bookToGive = myLittleBookshelf.giveBookByName('Воспоминания о минувшем будущем');
+      expect(bookToGive.name).toEqual('Воспоминания о минувшем будущем');
+      expect(myLittleBookshelf.books.length).toEqual(5);
+      const iDontGiveAbook = myLittleBookshelf.
+      giveBookByName('Как влиять на завоевание и людить дружбой на оказание (а ещё долго не Камчатка)');
+      expect(iDontGiveAbook).toEqual(null);
+  })
+
+  it('Повреждаем и восстановливаем книгу (а иначе библиотекарь сдалет из нашей шкуры новое платье синего цвета)', () => {
+
+    myLittleBookshelf.addBook(theUndead);
+    theUndead.state = 6;
+    expect(theUndead.state).toEqual(6);
+    theUndead.fix();
+    expect(theUndead.state).toEqual(9);
+  });
+
+  it('Затем улыбаемся и машем', () => {
+    myLittleBookshelf.addBook(theUndead);
+    expect(myLittleBookshelf.books.length).toEqual(1);
+    const book2found = myLittleBookshelf.findBookBy("name", "Смерть при жизни и жизнь после смерти: краткая автобиография");
+    expect(book2found.name).toEqual('Смерть при жизни и жизнь после смерти: краткая автобиография');
+  })
+})
